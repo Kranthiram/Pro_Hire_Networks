@@ -1,106 +1,65 @@
 # Pro_Hire_Networks
 
-## Week 1 – LLM APIs, Pydantic & Instructor
+# Week 1 – LLM APIs, Structured Outputs & Data Validation
 
-### Task 1 – Groq API
+## Core Concepts
 
-- Groq API ni Python lo use chesa.
-- `.env` file nundi `GROQ_API_KEY` read chesa.
-- `Groq()` client create chesi LLM ki request send chesa.
-- Response ni print chesa.
+### 1. LLM API Topologies
 
-Main concepts:
-- API Key
-- Environment Variables
-- Groq Client
-- Chat Completions
+LLM applications generally communicate with cloud LLM providers through APIs.
 
----
+Basic flow:
 
-### Task 2 – Pydantic
+Application
+→ API Request
+→ LLM Provider
+→ API Response
+→ Application
 
-Pydantic use chesi `UserProfile` model create chesa.
+Common providers:
 
-Fields:
-- name
-- age
-- email
-- pan
+- OpenAI
+- Anthropic
+- Groq
 
-Used:
-
-- `BaseModel` → Pydantic model create cheyadaniki
-- `Field` → field constraints pettadaniki
-- `@field_validator` → custom validation kosam
-- `ValidationError` → invalid data vachinappudu errors handle cheyadaniki
-
-Example validations:
-
-- Name minimum length
-- Age 18–100
-- Email validation
-- PAN format validation
+API requests and responses are generally exchanged using JSON.
 
 ---
 
-### Task 3 – Instructor + Groq + Pydantic
+### 2. Cloud LLM APIs
 
-Instructor ni Groq tho integrate chesa.
+Important concepts:
 
-Flow:
+- API Key → Authenticates the application
+- Endpoint → API URL where request is sent
+- Request → Data sent to the LLM
+- Response → Data returned by the LLM
+- Rate Limit → Maximum number of requests/tokens allowed
+- Free Tier → Provider-specific usage limitations
 
-User Prompt
-↓
-Groq LLM
-↓
-Instructor
-↓
-Pydantic Validation
-↓
-UserProfile Object
+Basic flow:
 
-Important:
+Python Application
+→ API Key
+→ Endpoint
+→ Request
+→ LLM
+→ Response
 
-`response_model=UserProfile`
-
-Idi LLM response ni expected Pydantic structure lo generate cheyadaniki use avutundi.
-
-Without Instructor:
-
-LLM → Raw Text
-
-With Instructor:
-
-LLM → Structured Pydantic Object
+Never expose API keys in GitHub.
 
 ---
 
-## Important Concepts
+### 3. Type Enforcement vs Regex Parsing
 
-### BaseModel
-Pydantic lo structured data model create cheyadaniki.
+LLMs generate non-deterministic text.
 
-### Field
-Field ki constraints/metadata define cheyadaniki.
+Regex parsing depends heavily on the exact output format.
 
-### field_validator
-Custom validation logic rayadaniki.
+Example:
 
-### ValidationError
-Validation fail ayinappudu Pydantic raise chese error.
+Expected:
 
-### Instructor
-LLM responses ni structured format lo obtain cheyadaniki.
-
-### response_model
-LLM output ye Pydantic model format lo undalo specify chestundi.
-
----
-
-## Week 1 Flow
-
-Groq API
-→ Pydantic
-→ Instructor
-→ Structured Output
-→ Validation
+```text
+Name: Kranthi
+Age: 22
