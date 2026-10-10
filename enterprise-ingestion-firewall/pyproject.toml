@@ -1,5 +1,5 @@
 [project]
-name = "pro-hire-networks"
+name = "enterprise-ingestion-firewall"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -7,21 +7,11 @@ authors = [
     { name = "Kranthiram", email = "alugulakranthiram@gmail.com" }
 ]
 requires-python = ">=3.11"
-dependencies = [
-    "groq>=1.7.0",
-    "instructor>=1.17.0",
-    "pydantic>=2.14.0",
-    "python-dotenv>=1.2.4",
-]
+dependencies = []
 
 [project.scripts]
-pro-hire-networks = "pro_hire_networks:main"
+enterprise-ingestion-firewall = "enterprise_ingestion_firewall:main"
 
 [build-system]
 requires = ["uv_build>=0.12.17,<0.13.0"]
 build-backend = "uv_build"
-
-[tool.uv.workspace]
-members = [
-    "enterprise-ingestion-firewall",
-]

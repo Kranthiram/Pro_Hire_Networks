@@ -27,10 +27,10 @@ class UserProfile(BaseModel):
 
 try:
     user = UserProfile(
-    name = "K",
-    age = 2,
-    email = "akgmail.com",
-    pan = "AK2LU1437K"
+    name = "Kranthi",
+    age = 22,
+    email = "ak@gmail.com",
+    pan = "AKILU1437K"
     )
 
     print(user)

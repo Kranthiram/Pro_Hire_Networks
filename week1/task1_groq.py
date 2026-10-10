@@ -16,7 +16,7 @@ response = client.chat.completions.create(
     messages = [
         {
         "role" : "user",
-        "content":"Explain API in one sentence"
+        "content":"Explain RAG in one sentence"
     }
     ]
 )
