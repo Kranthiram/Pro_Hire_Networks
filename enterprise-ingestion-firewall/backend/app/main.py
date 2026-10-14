@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, ValidationError
 
 from app.schemas.ingestion import IngestionRequest, IngestionResult
-from app.services.llm_service import analyze_message
+from app.services.llm_service import analyze_message, generate_response
 from app.utils.token_counter import estimate_tokens
 
 app = FastAPI(
@@ -49,6 +49,41 @@ def analyze(request: IngestionRequest):
         ) from exc
     except Exception as exc:
         # Keep the response simple; avoid exposing secrets or internal details.
+        raise HTTPException(
+            status_code=502,
+            detail="LLM request failed. Check the API key, model name, network, and provider limits.",
+        ) from exc
+
+@app.post("/api/respond")
+def generate_ai_response(request: IngestionRequest):
+    message = request.message.strip()
+
+    if not message:
+        raise HTTPException(status_code=422, detail="Message cannot be empty.")
+
+    try:
+        analysis = analyze_message(message)
+
+        response = generate_response(
+            message,
+            analysis
+        )
+
+        return {
+            "analysis": analysis,
+            "response": response
+        }
+
+    except ValidationError as exc:
+        raise HTTPException(
+            status_code=502,
+            detail={
+                "error": "The model response did not pass schema validation.",
+                "validation_errors": exc.errors(),
+            },
+        ) from exc
+
+    except Exception as exc:
         raise HTTPException(
             status_code=502,
             detail="LLM request failed. Check the API key, model name, network, and provider limits.",

@@ -56,3 +56,50 @@ def analyze_message(message: str) -> IngestionResult:
         ],
     )
     return result
+
+def generate_response(message: str, analysis: IngestionResult) -> str:
+    if not GROQ_API_KEY:
+        raise RuntimeError(
+            "GROQ_API_KEY is missing. Add it to backend/.env before using the LLM."
+        )
+
+    groq_client = Groq(api_key=GROQ_API_KEY)
+
+    context = f"""
+Detected intent: {analysis.intent}
+Risk profile: {analysis.risk_profile}
+Priority: {analysis.priority}
+Requires action: {analysis.requires_action}
+Summary: {analysis.summary}
+"""
+
+    response = groq_client.chat.completions.create(model=GROQ_MODEL, temperature=0,
+        messages=[
+            {
+                "role": "system",
+                "content": """
+You are a customer-support response generator.
+
+Generate a helpful, concise response to the user's message using
+the detected intent and summary as context.
+
+Do not invent facts.
+Do not claim that an order was checked, a payment was processed,
+or any external action was completed.
+If additional information is required, clearly ask the user for it.
+""",
+},
+        {
+            "role": "user",
+            "content": f"""
+User message:
+{message}
+
+Context from the intent-detection system:
+{context}
+
+Generate the appropriate customer-support response.
+""",
+        }])
+
+    return response.choices[0].message.content
