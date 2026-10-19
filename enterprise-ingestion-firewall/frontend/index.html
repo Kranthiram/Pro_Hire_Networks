@@ -3,43 +3,165 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ingestion Firewall</title>
+
+  <title>AI Assistant</title>
+
   <link rel="stylesheet" href="style.css">
+
+  <!-- Markdown renderer -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
+
 <body>
-  <main class="page">
-    <header class="hero">
-      <div class="eyebrow">AI · STRUCTURED DATA · VALIDATION</div>
-      <h1>Enterprise Ingestion Firewall</h1>
-      <p>Enter any message. The AI classifies its intent and returns data validated against a Pydantic schema.</p>
-    </header>
 
-    <section class="panel">
-      <label for="message">Your message</label>
-      <textarea id="message" rows="5" maxlength="5000" placeholder="Try: Hi there!&#10;Or: Where is my order?&#10;Or: My payment was deducted twice."></textarea>
-      <div class="examples">
-        <button type="button" class="example" data-message="Hi, good morning!">Greeting</button>
-        <button type="button" class="example" data-message="Where is my order?">Order tracking</button>
-        <button type="button" class="example" data-message="My payment was deducted twice. Please help urgently.">Payment issue</button>
-        <button type="button" class="example" data-message="What time is it now?">Current time</button>
-      </div>
-      <button id="submit" class="primary">Analyze message <span aria-hidden="true">→</span></button>
-      <p id="status" class="status" role="status">Backend: http://127.0.0.1:8000</p>
-    </section>
+  <div class="app">
 
-    <section class="panel result-panel">
-      <div class="result-heading">
-        <div>
-          <div class="eyebrow">RESPONSE</div>
-          <h2>Validated JSON</h2>
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+      <div class="brand">
+
+        <div class="brand-icon">AI</div>
+
+        <div class="brand-text">
+          <h1>AI Assistant</h1>
+          <p>Get help with your queries</p>
         </div>
-        <button id="copy" class="secondary" disabled>Copy JSON</button>
+
       </div>
-      <pre id="result"><code>Your structured result will appear here.</code></pre>
-      <p class="footnote">This demo classifies messages only. It does not actually retrieve orders or the current time. Token counts are estimates, not billing records.</p>
-    </section>
-    <footer>Built with FastAPI · Groq · Instructor · Pydantic</footer>
-  </main>
+
+
+      <button id="newChat" class="new-chat">
+        <span class="plus">+</span>
+        <span>New Chat</span>
+      </button>
+
+
+      <section class="suggestions">
+
+        <h2>Suggested Prompts</h2>
+
+        <button
+          type="button"
+          class="suggestion"
+          data-message="My payment was deducted twice. What should I do?"
+        >
+          My payment was deducted twice.<br>
+          What should I do?
+        </button>
+
+        <button
+          type="button"
+          class="suggestion"
+          data-message="How can I reset my password?"
+        >
+          How can I reset my password?
+        </button>
+
+        <button
+          type="button"
+          class="suggestion"
+          data-message="I want to check my order status."
+        >
+          I want to check my order status.
+        </button>
+
+        <button
+          type="button"
+          class="suggestion"
+          data-message="What are your refund policies?"
+        >
+          What are your refund policies?
+        </button>
+
+        <button
+          type="button"
+          class="suggestion"
+          data-message="How do I contact customer support?"
+        >
+          How do I contact customer<br>
+          support?
+        </button>
+
+      </section>
+
+
+      <div class="connection-status">
+
+        <span class="status-dot"></span>
+
+        <div>
+          <strong>Backend Connected</strong>
+          <small>FastAPI + Groq</small>
+        </div>
+
+      </div>
+
+    </aside>
+
+
+    <!-- ================= MAIN AREA ================= -->
+
+    <main class="main">
+
+      <header class="chat-header">
+        <h2 id="chatTitle">New Chat</h2>
+      </header>
+
+
+      <!-- ================= CHAT ================= -->
+
+      <section id="chatArea" class="chat-area">
+
+        <div id="emptyState" class="empty-state">
+
+          <div class="empty-icon">AI</div>
+
+          <h2>How can I help you?</h2>
+
+          <p>Ask a question to get started.</p>
+
+        </div>
+
+      </section>
+
+
+      <!-- ================= INPUT AREA ================= -->
+
+      <div class="input-section">
+
+        <div class="input-box">
+
+          <textarea
+            id="message"
+            rows="1"
+            maxlength="5000"
+            placeholder="Type your message..."
+          ></textarea>
+
+          <button
+            id="sendButton"
+            class="send-button"
+            type="button"
+          >
+            Send
+          </button>
+
+        </div>
+
+        <p class="disclaimer">
+          AI-generated responses may not always be accurate.
+        </p>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
   <script src="script.js"></script>
+
 </body>
 </html>
