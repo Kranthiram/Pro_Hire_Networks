@@ -14,10 +14,7 @@ const newChatButton = document.getElementById("newChat");
 const suggestionButtons = document.querySelectorAll(".suggestion");
 
 
-/* =========================================================
-   SUGGESTED PROMPTS
-   ========================================================= */
-
+/*SUGGESTED PROMPTS*/
 suggestionButtons.forEach((button) => {
 
   button.addEventListener("click", () => {
@@ -33,10 +30,7 @@ suggestionButtons.forEach((button) => {
 });
 
 
-/* =========================================================
-   NEW CHAT
-   ========================================================= */
-
+/*NEW CHAT */
 newChatButton.addEventListener("click", () => {
 
   chatArea.innerHTML = "";
@@ -58,10 +52,7 @@ newChatButton.addEventListener("click", () => {
 });
 
 
-/* =========================================================
-   TEXTAREA AUTO RESIZE
-   ========================================================= */
-
+/* TEXTAREA AUTO RESIZE */
 messageInput.addEventListener("input", autoResize);
 
 function autoResize() {
@@ -74,10 +65,7 @@ function autoResize() {
 }
 
 
-/* =========================================================
-   ENTER TO SEND
-   ========================================================= */
-
+/*ENTER TO SEND*/
 messageInput.addEventListener("keydown", (event) => {
 
   if (event.key === "Enter" && !event.shiftKey) {
@@ -91,19 +79,12 @@ messageInput.addEventListener("keydown", (event) => {
 });
 
 
-/* =========================================================
-   SEND BUTTON
-   ========================================================= */
-
+/*SEND BUTTON*/
 sendButton.addEventListener("click", sendMessage);
 
 
-/* =========================================================
-   SEND MESSAGE
-   ========================================================= */
-
+/*SEND MESSAGE*/
 async function sendMessage() {
-
   const message = messageInput.value.trim();
 
   if (!message) {
@@ -114,46 +95,34 @@ async function sendMessage() {
 
   }
 
-
   /* Remove welcome screen */
-
   if (emptyState.parentElement === chatArea) {
 
     emptyState.remove();
 
   }
 
-
   /* Update chat title */
-
   chatTitle.textContent = message.length > 40
     ? message.substring(0, 40) + "..."
     : message;
 
-
   /* Show user message */
-
   addUserMessage(message);
 
-
   /* Clear input */
-
   messageInput.value = "";
 
   autoResize();
 
 
   /* Disable send button */
-
   sendButton.disabled = true;
-
   sendButton.textContent = "...";
 
 
   /* Show loading */
-
   const loadingMessage = addLoadingMessage();
-
 
   try {
 
@@ -177,7 +146,6 @@ async function sendMessage() {
 
 
     /* Remove loading */
-
     loadingMessage.remove();
 
 
@@ -196,7 +164,6 @@ async function sendMessage() {
 
 
     /* Store session ID returned by backend */
-
     if (data.session_id) {
 
       sessionId = data.session_id;
@@ -205,7 +172,6 @@ async function sendMessage() {
 
 
     /* Render AI response */
-
     addAssistantMessage(data);
 
 
@@ -230,45 +196,28 @@ async function sendMessage() {
 }
 
 
-/* =========================================================
-   USER MESSAGE
-   ========================================================= */
+/* USER MESSAGE*/
 
 function addUserMessage(message) {
 
   const wrapper = document.createElement("div");
 
   wrapper.className = "user-message";
-
-
   const bubble = document.createElement("div");
-
   bubble.className = "user-bubble";
-
   bubble.textContent = message;
 
-
   wrapper.appendChild(bubble);
-
   chatArea.appendChild(wrapper);
-
-
   scrollToBottom();
 
 }
 
 
-/* =========================================================
-   LOADING MESSAGE
-   ========================================================= */
-
+/*LOADING MESSAGE*/
 function addLoadingMessage() {
-
   const wrapper = document.createElement("div");
-
   wrapper.className = "assistant-message";
-
-
   wrapper.innerHTML = `
     <div class="assistant-label">
       AI Assistant
@@ -279,161 +228,98 @@ function addLoadingMessage() {
     </div>
   `;
 
-
   chatArea.appendChild(wrapper);
-
   scrollToBottom();
-
-
   return wrapper;
 
 }
 
 
-/* =========================================================
-   ASSISTANT RESPONSE
-   ========================================================= */
-
+/* ASSISTANT RESPONSE*/
 function addAssistantMessage(data) {
-
   const wrapper = document.createElement("div");
-
   wrapper.className = "assistant-message";
 
 
   /* Assistant label */
-
   const label = document.createElement("div");
-
   label.className = "assistant-label";
-
   label.textContent = "AI Assistant";
 
 
   /* Markdown response */
-
   const response = document.createElement("div");
-
   response.className = "markdown";
 
 
   const markdownText =
-    data.response_markdown ||
-    "No response was generated.";
-
+   data.response_markdown || "No response was generated.";
 
   wrapper.appendChild(label);
-
   wrapper.appendChild(response);
-
   chatArea.appendChild(wrapper);
 
 
-  /*
-   * Show the Markdown response gradually.
-   * This gives a streaming-like experience
-   * without changing the backend API.
-   */
 
   typeMarkdown(response, markdownText);
 
 }
 
 
-/* =========================================================
-   MARKDOWN TYPE EFFECT
-   ========================================================= */
-
+/*MARKDOWN TYPE EFFECT*/
 function typeMarkdown(element, markdownText) {
-
   let index = 0;
-
   const charactersPerStep = 2;
-
   const speed = 10;
 
 
   function typeNext() {
-
     if (index < markdownText.length) {
-
       index += charactersPerStep;
-
-
       const visibleText =
         markdownText.substring(0, index);
-
-
       element.innerHTML =
         marked.parse(visibleText);
 
-
       scrollToBottom();
-
-
       setTimeout(typeNext, speed);
-
     } else {
 
       /* Final clean render */
-
       element.innerHTML =
         marked.parse(markdownText);
-
       scrollToBottom();
-
     }
 
   }
-
-
   typeNext();
 
 }
 
 
-/* =========================================================
-   ERROR MESSAGE
-   ========================================================= */
-
+/* ERROR MESSAGE*/
 function addErrorMessage(message) {
 
   const wrapper = document.createElement("div");
-
   wrapper.className = "assistant-message";
-
-
   const label = document.createElement("div");
-
   label.className = "assistant-label";
-
   label.textContent = "AI Assistant";
 
 
   const error = document.createElement("div");
-
   error.className = "markdown";
-
   error.textContent = message;
 
-
   wrapper.appendChild(label);
-
   wrapper.appendChild(error);
-
-
   chatArea.appendChild(wrapper);
-
-
   scrollToBottom();
 
 }
 
 
-/* =========================================================
-   SCROLL CHAT
-   ========================================================= */
-
+/* SCROLL CHAT */
 function scrollToBottom() {
 
   chatArea.scrollTo({
