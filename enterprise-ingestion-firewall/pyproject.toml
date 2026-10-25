@@ -1,17 +1,12 @@
 [project]
 name = "enterprise-ingestion-firewall"
 version = "0.1.0"
-description = "Add your description here"
+description = "Enterprise Ingestion Firewall"
 readme = "README.md"
-authors = [
-    { name = "Kranthiram", email = "alugulakranthiram@gmail.com" }
-]
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "mysql-connector-python>=26.10.0",
+]
 
-[project.scripts]
-enterprise-ingestion-firewall = "enterprise_ingestion_firewall:main"
-
-[build-system]
-requires = ["uv_build>=0.12.17,<0.13.0"]
-build-backend = "uv_build"
+[tool.uv]
+package = false

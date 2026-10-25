@@ -1,5 +1,7 @@
 const API_URL = "http://127.0.0.1:8000";
 
+let sessionId = null;
+
 const messageInput = document.getElementById("message");
 const sendButton = document.getElementById("sendButton");
 
@@ -46,6 +48,8 @@ newChatButton.addEventListener("click", () => {
   chatTitle.textContent = "New Chat";
 
   messageInput.value = "";
+
+  sessionId = null;
 
   autoResize();
 
@@ -162,7 +166,8 @@ async function sendMessage() {
       },
 
       body: JSON.stringify({
-        message: message
+        message: message,
+        session_id: sessionId
       })
 
     });
@@ -186,6 +191,15 @@ async function sendMessage() {
       addErrorMessage(errorMessage);
 
       return;
+
+    }
+
+
+    /* Store session ID returned by backend */
+
+    if (data.session_id) {
+
+      sessionId = data.session_id;
 
     }
 
@@ -311,44 +325,6 @@ function addAssistantMessage(data) {
   wrapper.appendChild(label);
 
   wrapper.appendChild(response);
-
-
-  /* Detected Intent */
-
-  const details = document.createElement("details");
-
-  details.className = "intent-details";
-
-
-  const summary = document.createElement("summary");
-
-  summary.textContent = "Detected Intent (Week 1)";
-
-
-  const intentJson = document.createElement("pre");
-
-  intentJson.className = "intent-json";
-
-
-  const intentData = {
-    intent: data.intent,
-    risk_profile: data.risk_profile,
-    priority: data.priority,
-    requires_action: data.requires_action,
-    summary: data.summary
-  };
-
-
-  intentJson.textContent =
-    JSON.stringify(intentData, null, 2);
-
-
-  details.appendChild(summary);
-
-  details.appendChild(intentJson);
-
-
-  wrapper.appendChild(details);
 
   chatArea.appendChild(wrapper);
 
